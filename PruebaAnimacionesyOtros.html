@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Animaciones y Otros</title>
+</head>
+<body style="background-color: black; color: white;">
+    <!--pantalla del Juego-->
+    <div id="marco" onclick="movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style:solid;border-color:white;width:640px;height:480px;position:relative;margin:auto; cursor:pointer;" onmousemove="captureMouse(event)">
+        <div id="coso" onmousedown="killCoso(); this.onclick=null;" style="visibility:hidden;background-color:white; width: 25px; height: 25px;position:absolute;top: 50px;left: 50px;border-radius: 50px;" onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
+        <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
+    </div>
+    <!--pantalla del Juego-->
+    <!--Datos: El contenedor "coso" es el circulo que se mueve por dentro del "marco" que delimita la pantalla del juego.-->
+    <!--contenedorControlador-->
+    <div id="contenedorControlador" style="display:none; width:640px;position:relative;margin:auto;">
+        <p id="controlador" style="text-align:center;">aqui controlador..</p>
+        <p style="text-align:center;" id="controladorcoso"></p>
+        <p style="text-align:center;"><span id="printerV"></span> <span id="printerH"></span></p>
+    </div>
+    <!--contenedorControlador-->
+    <!--botonControlador-->
+    <div style="width: 640px; position: relative; margin: auto; display: flex; justify-content: center; align-items: center; margin-top:5px;">
+        <button onclick="abrirCerrarContenedorControlador();" style="background-color: black; color: white; border-style: solid; border-color: white; " onmouseover="this.style.backgroundColor = 'white'; this.style.color = 'black'; this.style.cursor= 'pointer';" onmouseout="this.style.backgroundColor = 'black'; this.style.color = 'white';">Controlador</button>
+    </div>
+    <!--botonControlador-->
+    <!--SCRIPTS-->
+    <script>
+        //variables generales
+        var cosoIsKilled = 0;
+        //captura mouse
+        function captureMouse(event) {
+            var mouseX = event.clientX;
+            var mouseY = event.clientY;
+            document.getElementById('controlador').innerHTML = mouseX + " px, " + mouseY + " px.";
+        }
+        //funcion de boton abre y cierra pantalla de control de datos
+        function abrirCerrarContenedorControlador() {
+            const contenedorControlador = document.getElementById("contenedorControlador");
+            if (contenedorControlador.style.display == "none") {
+                contenedorControlador.style.display = "block";
+                document.getElementById('controladorcoso').innerHTML = "CosoX: " + "null" + " DirTop: " + "null" + " DirLeft: " + "null" + " CosoY: " + "null";
+                document.getElementById('printerV').innerHTML = "null";
+                document.getElementById('printerH').innerHTML = "null";
+
+            } else {
+                contenedorControlador.style.display = "none";
+            }
+        }
+        //funcion para Comenzar
+        function funComenzar() {
+            const cartel = document.getElementById("cartel");
+            const elem = document.getElementById("coso");
+            elem.style.visibility = "visible";
+            cartel.innerHTML = "¡Atrapa el círculo!";
+            setTimeout(function () { cartel.style.display = "none"; }, 2000);
+        }
+        //movimiento coso
+        function movimientoCoso() {
+            //isKilled?
+            let id = null;
+            const elem = document.getElementById("coso");
+            let cosoPosTop = 50;
+            let cosoPosLeft = 50;
+            let cosoDTop = 1;
+            let cosoDLeft = 1;
+            clearInterval(id);
+            id = setInterval(frame, 5);
+            function frame() {
+                if (cosoIsKilled == 0) {
+                    if (cosoPosTop >= 455) {
+                        cosoDTop = 1;
+                        document.getElementById('printerV').innerHTML = "arriba";
+                    }
+                    if (cosoPosTop <= 0) {
+                        cosoDTop = 0;
+                        document.getElementById('printerV').innerHTML = "abajo";
+                    }
+                    if (cosoPosLeft >= 615) {
+                        cosoDLeft = 0;
+                        document.getElementById('printerH').innerHTML = "izq";
+                    }
+                    if (cosoPosLeft <= 0) {
+                        cosoDLeft = 1;
+                        document.getElementById('printerH').innerHTML = "derecha";
+                    }
+                    if (cosoDTop == 1) {
+                        cosoPosTop = cosoPosTop - 1;
+                        elem.style.top = cosoPosTop + "px";
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                    }
+                    if (cosoDTop == 0) {
+                        cosoPosTop = cosoPosTop + 1;
+                        elem.style.top = cosoPosTop + "px";
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                    }
+                    if (cosoDLeft == 1) {
+                        cosoPosLeft = cosoPosLeft + 1;
+                        elem.style.left = cosoPosLeft + "px";
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                    }
+                    if (cosoDLeft == 0) {
+                        cosoPosLeft = cosoPosLeft - 1;
+                        elem.style.left = cosoPosLeft + "px";
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                    }
+                } else {
+                    document.getElementById('controladorcoso').innerHTML = "CosoX: " + "catched" + " DirTop: " + "catched" + " DirLeft: " + "catched" + " CosoY: " + "catched";
+                    document.getElementById('printerV').innerHTML = "catched";
+                    document.getElementById('printerH').innerHTML = "catched";
+                }
+            }//frame
+        }//movimientoCoso
+        //killcoso
+        function killCoso() {
+            const elem = document.getElementById("coso");
+            const cartel = document.getElementById("cartel");
+            elem.remove();
+            cosoIsKilled = 1;
+            cartel.innerHTML = "¡Atrapado!";
+            cartel.style.display = "flex";
+            setTimeout(function () { location.reload(); }, 3000);
+        }//killcoso
+    </script>
+    <!--SCRIPTS-->
+</body>
+</html>
