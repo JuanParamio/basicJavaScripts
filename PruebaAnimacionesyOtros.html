@@ -8,8 +8,8 @@
 </head>
 <body style="background-color: black; color: white;">
     <!--pantalla del Juego-->
-    <div id="marco" onclick="movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style:solid;border-color:white;width:640px;height:480px;position:relative;margin:auto; cursor:pointer;" onmousemove="captureMouse(event)">
-        <div id="coso" onmousedown="killCoso(); this.onclick=null;" style="visibility:hidden;background-color:white; width: 25px; height: 25px;position:absolute;top: 50px;left: 50px;border-radius: 50px;" onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
+    <div id="marco" onclick="numR(); movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style:solid;border-color:white;width:640px;height:480px;position:relative;margin:auto; cursor:pointer;" onmousemove="captureMouse(event)">
+        <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="visibility:hidden;background-color:white; width: 25px; height: 25px;position:absolute;top: 0px;left: 0px;border-radius: 50px;" onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
     <!--pantalla del Juego-->
@@ -29,7 +29,12 @@
     <!--SCRIPTS-->
     <script>
         //variables generales
-        var cosoIsKilled = 0;
+        var cosoIsCatched = 0;
+        var cosoDTop = 1;
+        var cosoDLeft = 1;
+        var cosoPosTop;
+        var cosoPosLeft;
+        var nr;
         //captura mouse
         function captureMouse(event) {
             var mouseX = event.clientX;
@@ -52,8 +57,6 @@
         //funcion para Comenzar
         function funComenzar() {
             const cartel = document.getElementById("cartel");
-            const elem = document.getElementById("coso");
-            elem.style.visibility = "visible";
             cartel.innerHTML = "¡Atrapa el círculo!";
             setTimeout(function () { cartel.style.display = "none"; }, 2000);
         }
@@ -62,14 +65,10 @@
             //isKilled?
             let id = null;
             const elem = document.getElementById("coso");
-            let cosoPosTop = 50;
-            let cosoPosLeft = 50;
-            let cosoDTop = 1;
-            let cosoDLeft = 1;
             clearInterval(id);
             id = setInterval(frame, 5);
             function frame() {
-                if (cosoIsKilled == 0) {
+                if (cosoIsCatched == 0) {
                     if (cosoPosTop >= 455) {
                         cosoDTop = 1;
                         document.getElementById('printerV').innerHTML = "arriba";
@@ -113,16 +112,67 @@
                 }
             }//frame
         }//movimientoCoso
-        //killcoso
-        function killCoso() {
+        //catchcoso
+        function catchCoso() {
             const elem = document.getElementById("coso");
             const cartel = document.getElementById("cartel");
             elem.remove();
-            cosoIsKilled = 1;
+            cosoIsCatched = 1;
             cartel.innerHTML = "¡Atrapado!";
             cartel.style.display = "flex";
             setTimeout(function () { location.reload(); }, 3000);
-        }//killcoso
+        }
+        //catchcoso
+        //crear numero random y funciones aleatorias a partir de ese numero
+        function numR() {
+            nr = Math.random();
+            nr = nr * 10
+            nr = Math.ceil(nr);
+            randomDir();
+        }
+        function randomDir() {
+            //direccion random inicial
+            if (nr < 3) {
+                cosoDTop = 0;
+                cosoDLeft = 0;
+            }
+            if (nr >= 3 && nr < 5) {
+                cosoDTop = 1;
+                cosoDLeft = 0;
+            }
+            if (nr >= 5 && nr < 7) {
+                cosoDTop = 1;
+                cosoDLeft = 1;
+            }
+            if (nr >= 7 && nr <= 10) {
+                cosoDTop = 0;
+                cosoDLeft = 1;
+            }
+            //direccion random inicial
+            //posicion random inicial (altura 0 a 480, anchura 0 a 640)
+            
+            if (nr < 3) {
+                cosoPosTop = 100;
+                cosoPosLeft = 50;
+            }
+            if (nr >= 3 && nr < 5) {
+                cosoPosTop = 389;
+                cosoPosLeft = 100;
+            }
+            if (nr >= 5 && nr < 7) {
+                cosoPosTop = 100;
+                cosoPosLeft = 500;
+            }
+            if (nr >= 7 && nr <= 10) {
+                cosoPosTop = 380;
+                cosoPosLeft = 510;
+            }
+            const elem = document.getElementById("coso");
+            setTimeout(function () { elem.style.visibility = "visible"; }, 2000);
+            
+            //posicion random inicial
+        }
+        //crear numero random y funciones aleatorias a partir de ese numero
     </script>
     <!--SCRIPTS-->
 </body>
