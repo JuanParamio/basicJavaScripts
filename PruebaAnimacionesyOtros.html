@@ -9,7 +9,7 @@
 <body style="background-color: black; color: white;">
     <!--pantalla del Juego-->
     <div id="marco" onclick="numR(); movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style:solid;border-color:white;width:640px;height:480px;position:relative;margin:auto; cursor:pointer;" onmousemove="captureMouse(event)">
-        <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="visibility:hidden;background-color:white; width: 25px; height: 25px;position:absolute;top: 0px;left: 0px;border-radius: 50px;" onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
+        <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 50px; height: 35px; position: absolute; top: 0px; left: 0px; border-radius: 35px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
     <!--pantalla del Juego-->
@@ -36,9 +36,9 @@
         var cosoPosLeft;
         var nr;
         //captura mouse
-        function captureMouse(event) {
-            var mouseX = event.clientX;
-            var mouseY = event.clientY;
+        function captureMouse(e) {
+            var mouseX = e.clientX;
+            var mouseY = e.clientY;
             document.getElementById('controlador').innerHTML = mouseX + " px, " + mouseY + " px.";
         }
         //funcion de boton abre y cierra pantalla de control de datos
@@ -46,7 +46,7 @@
             const contenedorControlador = document.getElementById("contenedorControlador");
             if (contenedorControlador.style.display == "none") {
                 contenedorControlador.style.display = "block";
-                document.getElementById('controladorcoso').innerHTML = "CosoX: " + "null" + " DirTop: " + "null" + " DirLeft: " + "null" + " CosoY: " + "null";
+                document.getElementById('controladorcoso').innerHTML = "CosoX: " + "null" + " CosoY: " + "null" + " DirTop: " + "null" + " DirLeft: " + "null";
                 document.getElementById('printerV').innerHTML = "null";
                 document.getElementById('printerH').innerHTML = "null";
 
@@ -57,7 +57,7 @@
         //funcion para Comenzar
         function funComenzar() {
             const cartel = document.getElementById("cartel");
-            cartel.innerHTML = "¡Atrapa el círculo!";
+            cartel.innerHTML = "¡Atrapa la mulita!";
             setTimeout(function () { cartel.style.display = "none"; }, 2000);
         }
         //movimiento coso
@@ -80,33 +80,35 @@
                     if (cosoPosLeft >= 615) {
                         cosoDLeft = 0;
                         document.getElementById('printerH').innerHTML = "izq";
+                        elem.style.transform = "scaleX(1)";
                     }
                     if (cosoPosLeft <= 0) {
                         cosoDLeft = 1;
                         document.getElementById('printerH').innerHTML = "derecha";
+                        elem.style.transform = "scaleX(-1)";
                     }
                     if (cosoDTop == 1) {
                         cosoPosTop = cosoPosTop - 1;
                         elem.style.top = cosoPosTop + "px";
-                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " CosoY: " + cosoPosLeft + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft;
                     }
                     if (cosoDTop == 0) {
                         cosoPosTop = cosoPosTop + 1;
                         elem.style.top = cosoPosTop + "px";
-                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " CosoY: " + cosoPosLeft + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft;
                     }
                     if (cosoDLeft == 1) {
                         cosoPosLeft = cosoPosLeft + 1;
                         elem.style.left = cosoPosLeft + "px";
-                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " CosoY: " + cosoPosLeft + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft;
                     }
                     if (cosoDLeft == 0) {
                         cosoPosLeft = cosoPosLeft - 1;
                         elem.style.left = cosoPosLeft + "px";
-                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft + " CosoY: " + cosoPosLeft;
+                        document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " CosoY: " + cosoPosLeft + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft;
                     }
                 } else {
-                    document.getElementById('controladorcoso').innerHTML = "CosoX: " + "catched" + " DirTop: " + "catched" + " DirLeft: " + "catched" + " CosoY: " + "catched";
+                    document.getElementById('controladorcoso').innerHTML = "CosoX: " + "catched" + " CosoY: " + "catched" + " DirTop: " + "catched" + " DirLeft: " + "catched";
                     document.getElementById('printerV').innerHTML = "catched";
                     document.getElementById('printerH').innerHTML = "catched";
                 }
@@ -118,7 +120,7 @@
             const cartel = document.getElementById("cartel");
             elem.remove();
             cosoIsCatched = 1;
-            cartel.innerHTML = "¡Atrapado!";
+            cartel.innerHTML = "¡Atrapada!";
             cartel.style.display = "flex";
             setTimeout(function () { location.reload(); }, 3000);
         }
@@ -173,6 +175,11 @@
             //posicion random inicial
         }
         //crear numero random y funciones aleatorias a partir de ese numero
+        //check click position
+        function checkClickPosition() {
+
+        }
+        //check click position
     </script>
     <!--SCRIPTS-->
 </body>
