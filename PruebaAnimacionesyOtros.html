@@ -8,7 +8,7 @@
 </head>
 <body style="background-color: black; color: white;">
     <!--pantalla del Juego-->
-    <div id="marco" onclick="numR(); movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style:solid;border-color:white;width:640px;height:480px;position:relative;margin:auto; cursor:pointer;" onmousemove="captureMouse(event)">
+    <div id="marco" onclick="numR(); movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 640px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 0px; left: 0px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
