@@ -10,6 +10,7 @@
     <!--pantalla del Juego-->
     <div id="marco" onclick="numR(); movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 640px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 0px; left: 0px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
+        <div id="mulita" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 50px; left: 50px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
     <!--pantalla del Juego-->
@@ -34,7 +35,38 @@
         var cosoDLeft = 1;
         var cosoPosTop;
         var cosoPosLeft;
+        var mulPosTop = 50;
+        var mulPosLeft = 50;
         var nr;
+        //lectura de teclas y movimiento mulita
+        addEventListener("keydown", checkKeys);
+        function checkKeys() {
+            var lastkey = event.key;
+            const mul = document.getElementById("mulita");
+            if (lastkey == "w" || lastkey == "ArrowUp") {
+                mulPosTop = mulPosTop - 5;
+                mul.style.top = mulPosTop + "px";
+            }
+            if (lastkey == "s" || lastkey == "ArrowDown") {
+                mulPosTop = mulPosTop + 5;
+                mul.style.top = mulPosTop + "px";
+            }
+            if (lastkey == "d" || lastkey == "ArrowLeft") {
+                mulPosLeft = mulPosLeft + 5;
+                mul.style.left = mulPosLeft + "px";
+                mul.style.transform = "scaleX(-1)";
+            }
+            if (lastkey == "a" || lastkey == "ArrowRight") {
+                mulPosLeft = mulPosLeft - 5;
+                mul.style.left = mulPosLeft + "px";
+                mul.style.transform = "scaleX(1)";
+            }
+        }
+        function eraseKeys() {
+            lastkey = "undefined";
+        }
+        //lectura de teclas y movimiento mulita
+
         //captura mouse
         function captureMouse(e) {
             var mouseX = e.clientX;
@@ -171,7 +203,8 @@
             }
             const elem = document.getElementById("coso");
             setTimeout(function () { elem.style.visibility = "visible"; }, 2000);
-            
+            const mul = document.getElementById("mulita");
+            setTimeout(function () { mul.style.visibility = "visible"; }, 2000);
             //posicion random inicial
         }
         //crear numero random y funciones aleatorias a partir de ese numero
