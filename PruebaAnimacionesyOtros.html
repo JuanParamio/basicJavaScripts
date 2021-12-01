@@ -3,14 +3,15 @@
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no,orientation=landscape">
     <title>Prueba Animaciones y Otros</title>
 </head>
 <body style="background-color: black; color: white;">
     <!--pantalla del Juego-->
-    <div id="marco" onclick="numR(); movimientoCoso(); funComenzar(); this.onclick=null;" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 640px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
-        <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 0px; left: 0px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
-        <div id="mulita" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 50px; left: 50px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
+    <div id="marco" onclick="numR(); movimientoCoso(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
+        <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-color: white; width: 25px; height: 25px; position: absolute; top: 0px; left: 0px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
+        <div id="mulita" style="display: none; transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 50px; left: 50px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
+        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
     <!--pantalla del Juego-->
@@ -38,6 +39,8 @@
         var mulPosTop = 50;
         var mulPosLeft = 50;
         var nr;
+        var ratonX;
+        var ratonY;
         //lectura de teclas y movimiento mulita
         addEventListener("keydown", checkKeys);
         function checkKeys() {
@@ -51,12 +54,12 @@
                 mulPosTop = mulPosTop + 5;
                 mul.style.top = mulPosTop + "px";
             }
-            if (lastkey == "d" || lastkey == "ArrowLeft") {
+            if (lastkey == "d" || lastkey == "ArrowRight") {
                 mulPosLeft = mulPosLeft + 5;
                 mul.style.left = mulPosLeft + "px";
                 mul.style.transform = "scaleX(-1)";
             }
-            if (lastkey == "a" || lastkey == "ArrowRight") {
+            if (lastkey == "a" || lastkey == "ArrowLeft") {
                 mulPosLeft = mulPosLeft - 5;
                 mul.style.left = mulPosLeft + "px";
                 mul.style.transform = "scaleX(1)";
@@ -70,7 +73,9 @@
         //captura mouse
         function captureMouse(e) {
             var mouseX = e.clientX;
+                ratonX = mouseX - 320;
             var mouseY = e.clientY;
+                ratonY = mouseY - 10;
             document.getElementById('controlador').innerHTML = mouseX + " px, " + mouseY + " px.";
         }
         //funcion de boton abre y cierra pantalla de control de datos
@@ -89,8 +94,10 @@
         //funcion para Comenzar
         function funComenzar() {
             const cartel = document.getElementById("cartel");
-            cartel.innerHTML = "¡Atrapa la mulita!";
+            cartel.innerHTML = "¡Atrapa tu comida!";
             setTimeout(function () { cartel.style.display = "none"; }, 2000);
+            document.getElementById("marco").onclick = null;
+            document.getElementById("marco").setAttribute("onclick","checkClickPosition()");
         }
         //movimiento coso
         function movimientoCoso() {
@@ -101,7 +108,7 @@
             id = setInterval(frame, 5);
             function frame() {
                 if (cosoIsCatched == 0) {
-                    if (cosoPosTop >= 430) {
+                    if (cosoPosTop >= 455) {
                         cosoDTop = 1;
                         document.getElementById('printerV').innerHTML = "arriba";
                     }
@@ -109,7 +116,7 @@
                         cosoDTop = 0;
                         document.getElementById('printerV').innerHTML = "abajo";
                     }
-                    if (cosoPosLeft >= 565) {
+                    if (cosoPosLeft >= 695) {
                         cosoDLeft = 0;
                         document.getElementById('printerH').innerHTML = "izq";
                         elem.style.transform = "scaleX(1)";
@@ -201,18 +208,54 @@
                 cosoPosTop = 380;
                 cosoPosLeft = 510;
             }
+            
             const elem = document.getElementById("coso");
             setTimeout(function () { elem.style.visibility = "visible"; }, 2000);
-            const mul = document.getElementById("mulita");
+
+            const mul = document.getElementById("mulitaFollow");
             setTimeout(function () { mul.style.visibility = "visible"; }, 2000);
             //posicion random inicial
         }
         //crear numero random y funciones aleatorias a partir de ese numero
-        //check click position
+        //check click position y movimiento Follow
         function checkClickPosition() {
-
+            movimientoFollow();
         }
-        //check click position
+        function movimientoFollow() {
+            let x;
+            let y;
+            x = ratonX;
+            y = ratonY;
+            let id = null;
+            const mul = document.getElementById("mulitaFollow");
+            let mulx = mul.style.left;
+            mulx = mulx.replace(/\D/g, "");
+            let muly = mul.style.top;
+            muly = muly.replace(/\D/g, "");
+            clearInterval(id);
+            id = setInterval(framedos, 5);
+            function framedos() {
+                if (mulx < ratonX && mulx != ratonX) {
+                    mulx = mulx + 1;
+                    mul.style.left = mulx + "px";
+
+                } else if (mulx > ratonX && mulx != ratonX) {
+                    mulx = mulx - 1;
+                    mul.style.left = mulx + "px";
+                }
+                if (muly < ratonY && muly != ratonY) {
+                    muly = mulY + 1;
+                    mul.style.top = muly + "px";
+                } else if (muly > ratonY && muly != ratonY) {
+                    muly = mulY - 1;
+                    mul.style.top = muly + "px";
+                }
+                if (mulx == ratonX || muly == ratonY) {
+                    clearInterval(id);
+                }
+            }
+        }
+        //check click position y movimiento Follow
     </script>
     <!--SCRIPTS-->
 </body>
