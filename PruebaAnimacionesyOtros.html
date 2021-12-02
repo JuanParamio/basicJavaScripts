@@ -235,6 +235,7 @@
             clearInterval(id);
             id = setInterval(framedos, 5);
             function framedos() {
+                /*
                 if (mulx < ratonX && mulx != ratonX) {
                     mulx = mulx + 1;
                     mul.style.left = mulx + "px";
@@ -243,16 +244,20 @@
                     mulx = mulx - 1;
                     mul.style.left = mulx + "px";
                 }
+                */
+                
                 if (muly < ratonY && muly != ratonY) {
-                    muly = mulY + 1;
+                    muly = muly + 1;
                     mul.style.top = muly + "px";
                 } else if (muly > ratonY && muly != ratonY) {
-                    muly = mulY - 1;
+                    muly = muly - 1;
                     mul.style.top = muly + "px";
                 }
+                /*
                 if (mulx == ratonX || muly == ratonY) {
                     clearInterval(id);
                 }
+                */
             }
         }
         //check click position y movimiento Follow
