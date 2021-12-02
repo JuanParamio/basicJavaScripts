@@ -101,12 +101,12 @@
         }
         //movimiento coso
         function movimientoCoso() {
-            //isKilled?
             let id = null;
             const elem = document.getElementById("coso");
             clearInterval(id);
             id = setInterval(frame, 5);
             function frame() {
+                //isCatched?
                 if (cosoIsCatched == 0) {
                     if (cosoPosTop >= 455) {
                         cosoDTop = 1;
@@ -147,11 +147,14 @@
                         document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " CosoY: " + cosoPosLeft + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft;
                     }
                 } else {
+                    clearInterval(id);
                     document.getElementById('controladorcoso').innerHTML = "CosoX: " + "catched" + " CosoY: " + "catched" + " DirTop: " + "catched" + " DirLeft: " + "catched";
                     document.getElementById('printerV').innerHTML = "catched";
                     document.getElementById('printerH').innerHTML = "catched";
                 }
             }//frame
+
+
         }//movimientoCoso
         //catchcoso
         function catchCoso() {
@@ -232,27 +235,37 @@
             mulx = mulx.replace(/\D/g, "");
             let muly = mul.style.top;
             muly = muly.replace(/\D/g, "");
+            if (x > mulx) {
+                mul.style.transform = "scaleX(-1)";
+            }
+            if (x < mulx) {
+                mul.style.transform = "scaleX(1)";
+            }
             clearInterval(id);
             id = setInterval(framedos, 5);
             function framedos() {
-                /*
-                if (mulx < ratonX && mulx != ratonX) {
-                    mulx = mulx + 1;
-                    mul.style.left = mulx + "px";
+                while (mulx != x) {
+                    if (mulx < x) {
+                        mulx = mulx + 1;
+                        mul.style.left = mulx + "px";
+                        
+                    } else if (mulx > x) {
+                        mulx = mulx - 1;
+                        mul.style.left = mulx + "px";
+                        
+                    }
+                }
+                while (muly != y) {
+                    if (muly < y) {
+                        muly = muly + 1;
+                        mul.style.top = muly + "px";
+                    } else if (muly > y) {
+                        muly = muly - 1;
+                        mul.style.top = muly + "px";
+                    }
+                }
 
-                } else if (mulx > ratonX && mulx != ratonX) {
-                    mulx = mulx - 1;
-                    mul.style.left = mulx + "px";
-                }
-                */
                 
-                if (muly < ratonY && muly != ratonY) {
-                    muly = muly + 1;
-                    mul.style.top = muly + "px";
-                } else if (muly > ratonY && muly != ratonY) {
-                    muly = muly - 1;
-                    mul.style.top = muly + "px";
-                }
                 /*
                 if (mulx == ratonX || muly == ratonY) {
                     clearInterval(id);
