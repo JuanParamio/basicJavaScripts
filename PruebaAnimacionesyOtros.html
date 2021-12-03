@@ -41,6 +41,8 @@
         var nr;
         var ratonX;
         var ratonY;
+        
+
         //lectura de teclas y movimiento mulita
         addEventListener("keydown", checkKeys);
         function checkKeys() {
@@ -222,14 +224,14 @@
         //crear numero random y funciones aleatorias a partir de ese numero
         //check click position y movimiento Follow
         function checkClickPosition() {
-            movimientoFollow();
+                movimientoFollow();  
         }
         function movimientoFollow() {
             let x;
             let y;
+            let id = null;
             x = ratonX;
             y = ratonY;
-            let id = null;
             const mul = document.getElementById("mulitaFollow");
             let mulx = mul.style.left;
             mulx = mulx.replace(/\D/g, "");
@@ -244,33 +246,24 @@
             clearInterval(id);
             id = setInterval(framedos, 5);
             function framedos() {
-                while (mulx != x) {
-                    if (mulx < x) {
+                if (mulx != x) {
+                    if (x > mulx) {
                         mulx = mulx + 1;
                         mul.style.left = mulx + "px";
-                        
-                    } else if (mulx > x) {
+                    } else if (x < mulx) {
                         mulx = mulx - 1;
                         mul.style.left = mulx + "px";
-                        
                     }
                 }
-                while (muly != y) {
-                    if (muly < y) {
+                if (muly != y) {
+                    if (y > muly) {
                         muly = muly + 1;
                         mul.style.top = muly + "px";
-                    } else if (muly > y) {
+                    } else if (y < muly) {
                         muly = muly - 1;
                         mul.style.top = muly + "px";
                     }
                 }
-
-                
-                /*
-                if (mulx == ratonX || muly == ratonY) {
-                    clearInterval(id);
-                }
-                */
             }
         }
         //check click position y movimiento Follow
