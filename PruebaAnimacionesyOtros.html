@@ -13,7 +13,7 @@
 
 
 
-        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
+        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
     <!--pantalla del Juego-->
@@ -240,6 +240,7 @@
             x = ratonX;
             y = ratonY;
             const mul = document.getElementById("mulitaFollow");
+            mul.style.backgroundImage = "url('mulitaRGBA.gif')";
             let mulx = mul.style.left;
             mulx = mulx.replace(/\D/g, "");
             let muly = mul.style.top;
@@ -274,6 +275,7 @@
                 if (mulx == x && muly == y) {
                     clearInterval(id);
                     checkClickMF = 0;
+                    mul.style.backgroundImage = "url('mulitaSTAY.png')";
                 }
             }
         }
