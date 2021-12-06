@@ -10,7 +10,9 @@
     <!--pantalla del Juego-->
     <div id="marco" onclick="numR(); movimientoCoso(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-color: white; width: 25px; height: 25px; position: absolute; top: 0px; left: 0px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
-        <div id="mulita" style="display: none; transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 50px; left: 50px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
+
+
+
         <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaRGBA.gif'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
@@ -41,6 +43,7 @@
         var nr;
         var ratonX;
         var ratonY;
+        var checkClickMF = 0;
         
 
         //lectura de teclas y movimiento mulita
@@ -224,7 +227,11 @@
         //crear numero random y funciones aleatorias a partir de ese numero
         //check click position y movimiento Follow
         function checkClickPosition() {
-                movimientoFollow();  
+            if (checkClickMF == 0) {
+                checkClickMF = 1;
+                movimientoFollow();
+            }
+                  
         }
         function movimientoFollow() {
             let x;
@@ -266,6 +273,7 @@
                 }
                 if (mulx == x && muly == y) {
                     clearInterval(id);
+                    checkClickMF = 0;
                 }
             }
         }
