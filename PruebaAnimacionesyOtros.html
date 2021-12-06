@@ -248,21 +248,24 @@
             function framedos() {
                 if (mulx != x) {
                     if (x > mulx) {
-                        mulx = mulx + 1;
+                        mulx++;
                         mul.style.left = mulx + "px";
-                    } else if (x < mulx) {
-                        mulx = mulx - 1;
+                    } else {
+                        mulx--;
                         mul.style.left = mulx + "px";
                     }
                 }
                 if (muly != y) {
                     if (y > muly) {
-                        muly = muly + 1;
+                        muly++;
                         mul.style.top = muly + "px";
-                    } else if (y < muly) {
-                        muly = muly - 1;
+                    } else {
+                        muly--;
                         mul.style.top = muly + "px";
                     }
+                }
+                if (mulx == x && muly == y) {
+                    clearInterval(id);
                 }
             }
         }
