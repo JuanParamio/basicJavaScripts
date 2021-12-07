@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no,orientation=landscape">
     <title>Prueba Animaciones y Otros</title>
 </head>
-<body style="background-color: black; color: white;">
+<body onload="checkCol();" style="background-color: black; color: white;">
     <!--pantalla del Juego-->
     <div id="marco" onclick="numR(); movimientoCoso(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="coso" style="transform: scaleX(1); visibility: hidden; background-color: white; width: 25px; height: 25px; position: absolute; top: 0px; left: 0px; border-radius: 50px; "></div>
@@ -283,6 +283,26 @@
             }
         }
         //check click position y movimiento Follow
+        //chequear colisiones entre divs
+        function checkCol() {
+            let id = null;
+            clearInterval(id);
+            setInterval(framecheckcol, 5);
+            const mul = document.getElementById("mulitaFollow");
+            const cos = document.getElementById("coso");
+            function framecheckcol () {
+                var object_1 = cos.getBoundingClientRect();
+                var object_2 = mul.getBoundingClientRect();
+                if (object_1.left < object_2.left + object_2.width && object_1.left + object_1.width > object_2.left &&
+                    object_1.top < object_2.top + object_2.height && object_1.top + object_1.height > object_2.top) {
+                    catchCoso();
+                }
+            }
+
+                
+            
+        }
+        //chequear colisiones entre divs
     </script>
     <!--SCRIPTS-->
 </body>
