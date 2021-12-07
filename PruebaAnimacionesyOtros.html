@@ -9,11 +9,8 @@
 <body style="background-color: black; color: white;">
     <!--pantalla del Juego-->
     <div id="marco" onclick="numR(); movimientoCoso(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
-        <div id="coso" onmousedown="catchCoso(); this.onclick=null;" style="transform: scaleX(1); visibility: hidden; background-color: white; width: 25px; height: 25px; position: absolute; top: 0px; left: 0px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='white';"></div>
-
-
-
-        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; " onmouseover="this.style.backgroundColor='purple';" onmouseout="this.style.backgroundColor='transparent';"></div>
+        <div id="coso" style="transform: scaleX(1); visibility: hidden; background-color: white; width: 25px; height: 25px; position: absolute; top: 0px; left: 0px; border-radius: 50px; "></div>
+        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; "></div>
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
     </div>
     <!--pantalla del Juego-->
@@ -78,9 +75,9 @@
         //captura mouse
         function captureMouse(e) {
             var mouseX = e.clientX;
-                ratonX = mouseX - 320;
+                ratonX = mouseX - 330;
             var mouseY = e.clientY;
-                ratonY = mouseY - 10;
+                ratonY = mouseY - 20;
             document.getElementById('controlador').innerHTML = mouseX + " px, " + mouseY + " px.";
         }
         //funcion de boton abre y cierra pantalla de control de datos
@@ -238,7 +235,13 @@
             let y;
             let id = null;
             x = ratonX;
+            if (x > 655) {
+                x = 655;
+            }
             y = ratonY;
+            if (y > 435) {
+                y = 435;
+            }
             const mul = document.getElementById("mulitaFollow");
             mul.style.backgroundImage = "url('mulitaRGBA.gif')";
             let mulx = mul.style.left;
