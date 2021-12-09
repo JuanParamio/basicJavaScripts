@@ -5,13 +5,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no,orientation=landscape">
     <title>Prueba Animaciones y Otros</title>
+    <style>
+        .cosoStyle {
+            transform: scaleX(1);
+            visibility: hidden;
+            background-color: white;
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            border-radius: 50px;
+        }
+    </style>
 </head>
-<body onload="checkCol();" style="background-color: black; color: white;">
+<body onload="crearCoso(); checkCol();" style="background-color: black; color: white;">
     <!--pantalla del Juego-->
-    <div id="marco" onclick="numR(); movimientoCoso(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
-        <div id="coso" style="transform: scaleX(1); visibility: hidden; background-color: white; width: 25px; height: 25px; position: absolute; top: 0px; left: 0px; border-radius: 50px; "></div>
-        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; "></div>
+    <div id="marco" onclick="numR(); movimientoCoso(); delayIsCatched(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
+        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; "></div>
     </div>
     <!--pantalla del Juego-->
     <!--Datos: El contenedor "coso" es el circulo que se mueve por dentro del "marco" que delimita la pantalla del juego.-->
@@ -30,7 +42,7 @@
     <!--SCRIPTS-->
     <script>
         //variables generales
-        var cosoIsCatched = 0;
+        var cosoIsCatched = 1;
         var cosoDTop = 1;
         var cosoDLeft = 1;
         var cosoPosTop;
@@ -41,9 +53,12 @@
         var ratonX;
         var ratonY;
         var checkClickMF = 0;
-        
-
-        //lectura de teclas y movimiento mulita
+        /*
+         Informaciòn Sobre El Codigo:
+         Esta metricado en pixeles por lo que el funcionamiento puede variar dependiendo el dispositivo. A CORREGIR.
+         No esta solucionado la creacion de elementos "comida" o tambien llamado "Coso"
+        */
+        //lectura de teclas y movimiento mulita (NO ESTA EN USO)
         addEventListener("keydown", checkKeys);
         function checkKeys() {
             var lastkey = event.key;
@@ -70,7 +85,7 @@
         function eraseKeys() {
             lastkey = "undefined";
         }
-        //lectura de teclas y movimiento mulita
+        //lectura de teclas y movimiento mulita (NO ESTA EN USO)
 
         //captura mouse
         function captureMouse(e) {
@@ -160,13 +175,23 @@
         }//movimientoCoso
         //catchcoso
         function catchCoso() {
-            const elem = document.getElementById("coso");
-            const cartel = document.getElementById("cartel");
-            elem.remove();
-            cosoIsCatched = 1;
-            cartel.innerHTML = "¡Atrapada!";
-            cartel.style.display = "flex";
-            setTimeout(function () { location.reload(); }, 3000);
+            if (cosoIsCatched == 0) {
+                const elem = document.getElementById("coso");
+                const cartel = document.getElementById("cartel");
+                cosoIsCatched = 1;
+                elem.remove();
+                cartel.innerHTML = "¡Atrapada!";
+                cartel.style.display = "flex";
+                setTimeout(function () {
+                    cartel.style.display = "none"; crearCoso();
+                    cosoIsCatched = 0;
+                    numR();
+                    movimientoCoso();
+                    delayIsCatched();
+                    hacerVisibles();
+                    checkCol();
+                }, 3000);
+            }
         }
         //catchcoso
         //crear numero random y funciones aleatorias a partir de ese numero
@@ -213,15 +238,27 @@
                 cosoPosTop = 380;
                 cosoPosLeft = 510;
             }
-            
-            const elem = document.getElementById("coso");
-            setTimeout(function () { elem.style.visibility = "visible"; }, 2000);
-
-            const mul = document.getElementById("mulitaFollow");
-            setTimeout(function () { mul.style.visibility = "visible"; }, 2000);
             //posicion random inicial
+            hacerVisibles();
         }
         //crear numero random y funciones aleatorias a partir de ese numero
+        //hacer visibles la mulita y la comida
+        function hacerVisibles() {
+            const elem = document.getElementById("coso");
+            const mul = document.getElementById("mulitaFollow");
+            if (elem.style.visibility != "visible") {
+                setTimeout(function () { elem.style.visibility = "visible"; }, 2000);
+            }
+            if (mul.style.visibility != "visible") {
+                setTimeout(function () { mul.style.visibility = "visible"; }, 2000);
+            }
+        }
+        //hacer visibles la mulita y la comida
+        //delay para cosoIsCatched
+        function delayIsCatched() {
+            setTimeout(function () { cosoIsCatched = 0; }, 2000);
+        }
+        //delay para cosoIsCatched
         //check click position y movimiento Follow
         function checkClickPosition() {
             if (checkClickMF == 0) {
@@ -290,19 +327,29 @@
             setInterval(framecheckcol, 5);
             const mul = document.getElementById("mulitaFollow");
             const cos = document.getElementById("coso");
-            function framecheckcol () {
-                var object_1 = cos.getBoundingClientRect();
-                var object_2 = mul.getBoundingClientRect();
-                if (object_1.left < object_2.left + object_2.width && object_1.left + object_1.width > object_2.left &&
-                    object_1.top < object_2.top + object_2.height && object_1.top + object_1.height > object_2.top) {
-                    catchCoso();
+            function framecheckcol() {
+                if (cosoIsCatched == 0) {
+                    var object_1 = cos.getBoundingClientRect();
+                    var object_2 = mul.getBoundingClientRect();
+                    if (object_1.left < object_2.left + object_2.width && object_1.left + object_1.width > object_2.left &&
+                        object_1.top < object_2.top + object_2.height && object_1.top + object_1.height > object_2.top) {
+                        catchCoso();
+                    }
                 }
             }
-
-                
-            
         }
         //chequear colisiones entre divs
+        //crear coso
+        function crearCoso() {
+            const marco = document.getElementById("marco");
+            const mul = document.getElementById("mulitaFollow");
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("cosoStyle");
+            newDiv.setAttribute("id", "coso");
+            marco.appendChild(newDiv);
+            marco.insertBefore(newDiv, mul);
+        }
+        //crear coso
     </script>
     <!--SCRIPTS-->
 </body>
