@@ -21,7 +21,7 @@
 </head>
 <body onload="crearCoso(); checkCol();" style="background-color: black; color: white;">
     <!--pantalla del Juego-->
-    <div id="marco" onclick="numR(); movimientoCoso(); delayIsCatched(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
+    <div id="marco" onclick="numR(); delayIsCatched(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
         <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; "></div>
     </div>
@@ -186,7 +186,6 @@
                     cartel.style.display = "none"; crearCoso();
                     cosoIsCatched = 0;
                     numR();
-                    movimientoCoso();
                     delayIsCatched();
                     hacerVisibles();
                     checkCol();
@@ -256,7 +255,7 @@
         //hacer visibles la mulita y la comida
         //delay para cosoIsCatched
         function delayIsCatched() {
-            setTimeout(function () { cosoIsCatched = 0; }, 2000);
+            setTimeout(function () { cosoIsCatched = 0; movimientoCoso(); }, 2000);
         }
         //delay para cosoIsCatched
         //check click position y movimiento Follow
