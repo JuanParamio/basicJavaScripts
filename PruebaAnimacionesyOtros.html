@@ -7,11 +7,13 @@
     <title>Prueba Animaciones y Otros</title>
     <style>
         .cosoStyle {
-            transform: scaleX(1);
             visibility: hidden;
-            background-color: white;
-            width: 25px;
-            height: 25px;
+            transform: scaleX(1) scaleY(1) rotate(30deg);
+            z-index: -1;
+            background-image: url('bug.gif');
+            background-size: contain;
+            width: 50px;
+            height: 50px;
             position: absolute;
             top: 0px;
             left: 0px;
@@ -21,9 +23,10 @@
 </head>
 <body onload="crearCoso(); checkCol();" style="background-color: black; color: white;">
     <!--pantalla del Juego-->
-    <div id="marco" onclick="numR(); delayIsCatched(); funComenzar();" style="border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
+    <div id="marco" onclick="numR(); delayIsCatched(); funComenzar();" style="z-index: 0; border-style: solid; border-color: white; background-image: url('grassanddirt.jpg'); background-size: contain; width: 720px; height: 480px; position: relative; margin: auto; cursor: pointer;" onmousemove="captureMouse(event)">
         <div id="cartel" style="user-select: none; font-size: 150%; height: 100%; display: flex; align-items: center; justify-content: center;">Click para COMENZAR...</div>
-        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; "></div>
+        <div id="mulitaFollow" style="transform: scaleX(1); visibility: hidden; z-index: -1; background-image: url('mulitaSTAY.png'); background-size: contain; width: 75px; height: 50px; position: absolute; top: 100px; left: 100px; border-radius: 50px; "></div>
+        <div id="datos" style="user-select: none; display: none; visibility: hidden; position: absolute; top: 100px; left: 100px; "></div>
     </div>
     <!--pantalla del Juego-->
     <!--Datos: El contenedor "coso" es el circulo que se mueve por dentro del "marco" que delimita la pantalla del juego.-->
@@ -53,10 +56,12 @@
         var ratonX;
         var ratonY;
         var checkClickMF = 0;
+        var contCatchs = 0;
         /*
          Informaciòn Sobre El Codigo:
          Esta metricado en pixeles por lo que el funcionamiento puede variar dependiendo el dispositivo. A CORREGIR.
-         No esta solucionado la creacion de elementos "comida" o tambien llamado "Coso"
+         No esta solucionado la creacion de elementos "comida" o tambien llamado "Coso".
+         Los mensajes de texto aparecen por debajo de los elementos animados. A CORREGIR.
         */
         //lectura de teclas y movimiento mulita (NO ESTA EN USO)
         addEventListener("keydown", checkKeys);
@@ -86,7 +91,6 @@
             lastkey = "undefined";
         }
         //lectura de teclas y movimiento mulita (NO ESTA EN USO)
-
         //captura mouse
         function captureMouse(e) {
             var mouseX = e.clientX;
@@ -125,7 +129,7 @@
             function frame() {
                 //isCatched?
                 if (cosoIsCatched == 0) {
-                    if (cosoPosTop >= 455) {
+                    if (cosoPosTop >= 430) {
                         cosoDTop = 1;
                         document.getElementById('printerV').innerHTML = "arriba";
                     }
@@ -133,15 +137,13 @@
                         cosoDTop = 0;
                         document.getElementById('printerV').innerHTML = "abajo";
                     }
-                    if (cosoPosLeft >= 695) {
+                    if (cosoPosLeft >= 670) {
                         cosoDLeft = 0;
                         document.getElementById('printerH').innerHTML = "izq";
-                        elem.style.transform = "scaleX(1)";
                     }
                     if (cosoPosLeft <= 0) {
                         cosoDLeft = 1;
                         document.getElementById('printerH').innerHTML = "derecha";
-                        elem.style.transform = "scaleX(-1)";
                     }
                     if (cosoDTop == 1) {
                         cosoPosTop = cosoPosTop - 1;
@@ -163,6 +165,19 @@
                         elem.style.left = cosoPosLeft + "px";
                         document.getElementById('controladorcoso').innerHTML = "CosoX: " + cosoPosTop + " CosoY: " + cosoPosLeft + " DirTop: " + cosoDTop + " DirLeft: " + cosoDLeft;
                     }
+                    if (cosoDTop == 0 && cosoDLeft == 0) {
+                        elem.style.transform = "scaleX(-1) scaleY(-1) rotate(30deg)";
+                    }
+                    if (cosoDTop == 1 && cosoDLeft == 0) {
+                        elem.style.transform = "scaleX(-1) scaleY(1) rotate(30deg)";
+                    }
+                    if (cosoDTop == 0 && cosoDLeft == 1) {
+                        elem.style.transform = "scaleX(1) scaleY(-1) rotate(30deg)";
+                    }
+                    if (cosoDTop == 1 && cosoDLeft == 1) {
+                        elem.style.transform = "scaleX(1) scaleY(1) rotate(30deg)";
+                    }
+
                 } else {
                     clearInterval(id);
                     document.getElementById('controladorcoso').innerHTML = "CosoX: " + "catched" + " CosoY: " + "catched" + " DirTop: " + "catched" + " DirLeft: " + "catched";
@@ -170,8 +185,6 @@
                     document.getElementById('printerH').innerHTML = "catched";
                 }
             }//frame
-
-
         }//movimientoCoso
         //catchcoso
         function catchCoso() {
@@ -179,7 +192,10 @@
                 const elem = document.getElementById("coso");
                 const cartel = document.getElementById("cartel");
                 cosoIsCatched = 1;
+                elem.style.visibility = "hidden";
                 elem.remove();
+                contCatchs = contCatchs + 1;
+                displayCountCatchs();
                 cartel.innerHTML = "¡Atrapada!";
                 cartel.style.display = "flex";
                 setTimeout(function () {
@@ -246,10 +262,10 @@
             const elem = document.getElementById("coso");
             const mul = document.getElementById("mulitaFollow");
             if (elem.style.visibility != "visible") {
-                setTimeout(function () { elem.style.visibility = "visible"; }, 2000);
+                setTimeout(function () { elem.style.visibility = "visible"; }, 2500);
             }
             if (mul.style.visibility != "visible") {
-                setTimeout(function () { mul.style.visibility = "visible"; }, 2000);
+                setTimeout(function () { mul.style.visibility = "visible"; }, 2500);
             }
         }
         //hacer visibles la mulita y la comida
@@ -263,8 +279,7 @@
             if (checkClickMF == 0) {
                 checkClickMF = 1;
                 movimientoFollow();
-            }
-                  
+            }         
         }
         function movimientoFollow() {
             let x;
@@ -343,12 +358,45 @@
             const marco = document.getElementById("marco");
             const mul = document.getElementById("mulitaFollow");
             const newDiv = document.createElement("div");
+            newDiv.style.visibility = "hidden";
             newDiv.classList.add("cosoStyle");
             newDiv.setAttribute("id", "coso");
             marco.appendChild(newDiv);
             marco.insertBefore(newDiv, mul);
         }
         //crear coso
+        //muestra datos al lado de la mulita
+        function displayCountCatchs() {
+            const datosdiv = document.getElementById("datos");
+            const mul = document.getElementById("mulitaFollow");
+            let mulleft;
+            let multop;
+            let id = null;
+            clearInterval(id);
+            setInterval(framedisplaycatchs, 5);
+            function framedisplaycatchs() {
+                if (cosoIsCatched == 1) {
+                    datosdiv.innerHTML = contCatchs;
+                    datosdiv.style.display = "flex";
+                    datosdiv.style.visibility = "visible";
+                    multop = mul.style.top;
+                    multop = multop.replace(/\D/g, "");
+                    mulleft = mul.style.left;
+                    mulleft = mulleft.replace(/\D/g, "");
+                    datosdiv.style.top = multop + "px";
+                    datosdiv.style.left = (parseInt(mulleft) + parseInt(70)) + "px";
+                }
+                if (cosoIsCatched == 0) {
+                    datosdiv.style.display = "none";
+                    datosdiv.style.visibility = "hidden";
+                    datosdiv.style.top = 0 + "px";
+                    datosdiv.style.left = 0 + "px";
+                    clearInterval(id);
+                }
+            }
+            
+        }
+        //muestra datos al lado de la mulita
     </script>
     <!--SCRIPTS-->
 </body>
